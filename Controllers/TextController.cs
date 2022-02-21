@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace PhotoStock.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("controller")]
     public class TextController : ControllerBase
     {
-        
     }
 }
