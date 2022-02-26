@@ -1,8 +1,7 @@
-﻿using PhotoStock.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using PhotoStock.Data;
 using PhotoStock.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PhotoStock.DAL
@@ -16,36 +15,50 @@ namespace PhotoStock.DAL
             this.context = context;
         }
 
-        public async void DeleteTextAsync(int textId)
+        public async Task DeleteTextAsync(int textId)
         {
             var text = await context.Texts.FindAsync(textId);
             context.Texts.Remove(text);
+            await context.SaveChangesAsync();
         }
 
-        public async Task<Text> GetTextById(int textId)
+        public async Task<Text> GetTextByIdAsync(int textId)
         {
             var text = await context.Texts.FindAsync(textId);
             return text;
         }
 
-        public IEnumerable<Text> GetTexts()
+        public async Task<IEnumerable<Text>> GetTextsAsync()
         {
-            return context.Texts.ToList();
+            return await context.Texts.ToListAsync();
         }
 
-        public async void InsertTextAsync(Text text)
+        public async Task<Text> InsertTextAsync(Text text)
         {
-            await context.Texts.AddAsync(text);
+
+            var newText = await context.Texts.AddAsync(text);
+            await context.SaveChangesAsync();
+            return newText.Entity;
         }
 
-        public void SaveAsync()
+        public async Task SaveAsync()
         {
-            context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
-        public void UpdateText(Text text)
+        /*Позже при надобности добавить 2 модели, как и для фото, а так же осуществить маппинг, как и для фото(зарагестрировать в стартапе,
+         создать мапы в MappingProfiles*/
+        public async Task UpdateTextAsync(Text newText)
         {
-            context.Entry(text).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            var text = await context.Texts.FindAsync(newText.Id);
+            //Не нужно присваивать Id, CreationDate, Author, AuthorForeignKey,  т.к. сработает маппинг
+            text.Name = newText.Name;
+            text.PurchaseAmount = newText.PurchaseAmount;
+            text.Content = newText.Content;
+            text.Cost = newText.Cost;
+            text.Demension = newText.Demension;
+
+            await context.SaveChangesAsync();
         }
     }
 }

@@ -1,17 +1,16 @@
 ﻿using PhotoStock.Models;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PhotoStock.DAL
 {
-    interface ITextRepository
+    public interface ITextRepository
     {
-        IEnumerable<Text> GetTexts();
-        Task<Text> GetTextById(int textId);
-        void DeleteTextAsync(int textId);
-        void InsertTextAsync(Text text);
-        void SaveAsync();
-        void UpdateText(Text text);
+        Task<IEnumerable<Text>> GetTextsAsync();
+        Task<Text> GetTextByIdAsync(int textId);
+        Task DeleteTextAsync(int textId);
+        Task<Text> InsertTextAsync(Text text);
+        Task SaveAsync();
+        Task UpdateTextAsync(Text text);
     }
 }

@@ -1,53 +1,63 @@
-﻿using PhotoStock.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using PhotoStock.Data;
 using PhotoStock.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PhotoStock.DAL
 {
     public class AuthorRepository : IAuthorRepository
     {
-        public ApplicationDbContext Context { get; set; }
+        private ApplicationDbContext context { get; set; }
 
         public AuthorRepository(ApplicationDbContext context)
         {
-            Context = context;
+            this.context = context;
         }
 
-        public async void DeleteAuthorAsync(int authorId)
+        public async Task DeleteAuthorAsync(int authorId)
         {
-            var author = await Context.Authors.FindAsync(authorId);
-            Context.Authors.Remove(author);
+            var author = await context.Authors.FindAsync(authorId);
+            context.Authors.Remove(author);
+            await context.SaveChangesAsync();
         }
 
-      
+
 
         public async Task<Author> GetAuthorByIdAsync(int authorId)
         {
-            var author = await Context.Authors.FindAsync(authorId);
+            var author = await context.Authors.FindAsync(authorId);
             return author;
         }
 
-        public IEnumerable<Author> GetAuthors()
+        public async Task<IEnumerable<Author>> GetAuthorsAsync()
         {
-            return Context.Authors.ToList();
+            return await context.Authors.ToListAsync();
         }
 
-        public async void InsertAuthorAsync(Author author)
+        public async Task<Author> InsertAuthorAsync(Author author)
         {
-            await Context.Authors.AddAsync(author);
+            var newAuthor = await context.Authors.AddAsync(author);
+            await context.SaveChangesAsync();
+            return newAuthor.Entity;
         }
 
-        public async void SaveAsync()
+        public async Task SaveAsync()
         {
-            await Context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
-        public void UpdateAuthor(Author author)
+
+        /*Позже при надобности добавить 2 модели, как и для фото, а так же осуществить маппинг, как и для фото(зарагестрировать в стартапе,
+         создать мапы в MappingProfiles*/
+        public async Task UpdateAuthorAsync(Author newAuthor)
         {
-            Context.Entry(author).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            var author = await context.Authors.FindAsync(newAuthor.Id);
+            author.Name = newAuthor.Name;
+            author.Nickname = newAuthor.Nickname;
+            author.Age = newAuthor.Age;
+
+            await context.SaveChangesAsync();
         }
     }
 }
