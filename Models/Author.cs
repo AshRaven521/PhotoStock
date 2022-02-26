@@ -9,5 +9,12 @@ namespace PhotoStock.Models
         public string Nickname { get; set; }
         public short Age { get; set; }
         public DateTime CreationDate { get; set; }
+        /*[NotMapped]
+        public List<Photo> Photos { get; set; }
+        [NotMapped]
+        public List<Text> Texts { get; set; }*/
+
+        public Photo Photo { get; set; }
+        public Text Text { get; set; }
     }
 }
