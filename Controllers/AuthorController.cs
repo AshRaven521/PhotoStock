@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PhotoStock.DAL;
-using PhotoStock.Data;
-using PhotoStock.Models;
-using System.Collections.Generic;
+using PhotoStock.Services;
 using System.Threading.Tasks;
 
 namespace PhotoStock.Controllers
@@ -12,34 +8,20 @@ namespace PhotoStock.Controllers
     [Route("[controller]")]
     public class AuthorController : ControllerBase
     {
-        private IAuthorRepository authorRepository; 
+        private IAuthorService authorService;
 
-        public AuthorController(IAuthorRepository authorRepository)
+        public AuthorController(IAuthorService authorService)
         {
-            this.authorRepository = authorRepository;
+            this.authorService = authorService;
         }
-        
 
-        /*[HttpPost]
-        public async Task<IActionResult> SaveAuthors()
+
+        [HttpGet("author-list")]
+        public async Task<IActionResult> GetAll()
         {
-            var author1 = new Author { Name = "Tom", Age = 33 };
-            var author2 = new Author { Name = "Alice", Age = 26 };
+            var authors = await authorService.GetAuthorsAsync();
 
-            //await context.Authors.AddRangeAsync(author1, author2);
-
-            //await context.SaveChangesAsync();
-
-
-            //var authors = await context.Authors.ToListAsync();
-            //return Ok(authors);
-            return Ok();
-        }*/
-
-        [HttpGet]
-        public IEnumerable<Author> GetAll()
-        {
-            return authorRepository.GetAuthors();
+            return Ok(authors);
         }
     }
 }
