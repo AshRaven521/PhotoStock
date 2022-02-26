@@ -11,6 +11,7 @@ namespace PhotoStock.Models
         public DateTime CreationDate { get; set; }
         public int Cost { get; set; }
         public Author Author { get; set; }
+        public int AuthorForeignKey { get; set; }
         public int PurchaseAmount { get; set; }
     }
 }
