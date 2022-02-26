@@ -35,7 +35,12 @@ namespace PhotoStock.Migrations
                     b.Property<string>("Nickname")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("TextId1")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TextId1");
 
                     b.ToTable("Authors");
                 });
@@ -46,7 +51,7 @@ namespace PhotoStock.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("AuthorId")
+                    b.Property<int>("AuthorForeignKey")
                         .HasColumnType("int");
 
                     b.Property<string>("ContentUrl")
@@ -72,7 +77,8 @@ namespace PhotoStock.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("AuthorForeignKey")
+                        .IsUnique();
 
                     b.ToTable("Photos");
                 });
@@ -83,7 +89,7 @@ namespace PhotoStock.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("AuthorId")
+                    b.Property<int>("AuthorForeignKey")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -106,16 +112,28 @@ namespace PhotoStock.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("AuthorForeignKey")
+                        .IsUnique();
 
                     b.ToTable("Texts");
+                });
+
+            modelBuilder.Entity("PhotoStock.Models.Author", b =>
+                {
+                    b.HasOne("PhotoStock.Models.Text", "Text")
+                        .WithMany()
+                        .HasForeignKey("TextId1");
+
+                    b.Navigation("Text");
                 });
 
             modelBuilder.Entity("PhotoStock.Models.Photo", b =>
                 {
                     b.HasOne("PhotoStock.Models.Author", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId");
+                        .WithOne("Photo")
+                        .HasForeignKey("PhotoStock.Models.Photo", "AuthorForeignKey")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Author");
                 });
@@ -123,10 +141,17 @@ namespace PhotoStock.Migrations
             modelBuilder.Entity("PhotoStock.Models.Text", b =>
                 {
                     b.HasOne("PhotoStock.Models.Author", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId");
+                        .WithOne()
+                        .HasForeignKey("PhotoStock.Models.Text", "AuthorForeignKey")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("PhotoStock.Models.Author", b =>
+                {
+                    b.Navigation("Photo");
                 });
 #pragma warning restore 612, 618
         }
