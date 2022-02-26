@@ -9,6 +9,8 @@ using PhotoStock.Data;
 using PhotoStock.DAL;
 using Pomelo.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using PhotoStock.Services;
+using PhotoStock.Mapping;
 
 namespace PhotoStock
 {
@@ -27,19 +29,20 @@ namespace PhotoStock
             services.AddDbContextPool<ApplicationDbContext>(opt => 
                 opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"), 
                 ServerVersion.AutoDetect(Configuration.GetConnectionString("DefaultConnection"))));
-
-            services.AddScoped<ApplicationDbContext>();
+            
+            services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<ITextRepository, TextRepository>();
+            services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IAuthorService, AuthorService>();
+            services.AddScoped<ITextService, TextService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PhotoStock", Version = "v1" });
             });
             services.AddMvc();
-
-            //services.AddScoped<IAuthorRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
