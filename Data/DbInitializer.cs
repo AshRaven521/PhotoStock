@@ -32,7 +32,7 @@ namespace PhotoStock.Data
                         new Photo{Name = "kazantip_2007", ContentUrl = "https://klike.net/uploads/posts/2019-06/1560838636_4.jpg", Author = new Author{
                                 Name = "Nikitos", CreationDate = DateTime.Now, Age = 13, Nickname = "logger"}, 
                                 Cost = 240, CreationDate = DateTime.Now, Height = 650, Width = 700, PurchaseAmount = 12 },
-                        new Photo{Name = "tadzhiliston_1998", ContentUrl = "https://img.av.by/news/news_image/news_46445_2.jpg", Author = new Author{
+                        new Photo{Name = "tadzhikiston_1998", ContentUrl = "https://img.av.by/news/news_image/news_46445_2.jpg", Author = new Author{
                                 Name = "Vlados", Nickname = "Verdol", Age = 21, CreationDate = DateTime.Now},
                                 Cost = 190, CreationDate = DateTime.Now, Height = 700, Width = 850, PurchaseAmount = 24 }
                     });
