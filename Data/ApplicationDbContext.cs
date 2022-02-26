@@ -14,5 +14,13 @@ namespace PhotoStock.Data
         {
             Database.EnsureCreated();
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Photo>().HasOne(b => b.Author).WithOne(p => p.Photo).HasForeignKey<Photo>(a => a.AuthorForeignKey);
+            builder.Entity<Text>().HasOne(p => p.Author).WithOne().HasForeignKey<Text>(a => a.AuthorForeignKey);
+        }
     }
 }
